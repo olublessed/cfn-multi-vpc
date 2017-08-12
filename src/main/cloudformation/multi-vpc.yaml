@@ -41,6 +41,7 @@ Parameters:
   InfraTemplates:
     Description: Key name prefix for infrastructure templates
     Type: String
+    Default: release/com/amazon/aws/cfn-compliance-common/0.0.3
   bCreateProductionVPC:
     Description: Should the Production VPC get created?
     Type: String
