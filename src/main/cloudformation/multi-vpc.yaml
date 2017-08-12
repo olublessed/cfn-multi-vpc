@@ -385,27 +385,91 @@ Outputs:
   CfnStacksVersion:
     Description: cfn-stacks.com artifact version
     Value: v@version@
+
   CfnStacksIdProductionVpcTemplate:
     Condition: CreateProductionVPC
     Value: !GetAtt ProductionVpcTemplate.Outputs.CfnStacksId
   CfnStacksVersionProductionVpcTemplate:
     Condition: CreateProductionVPC
     Value: !GetAtt ProductionVpcTemplate.Outputs.CfnStacksVersion
+  ProductionVpc:
+    Condition: CreateProductionVPC
+    Value: !GetAtt ProductionVpcTemplate.Outputs.rVPCProduction
+  ProductionDmzSubnet1:
+    Condition: CreateProductionVPC
+    Value: !GetAtt ProductionVpcTemplate.Outputs.rDMZSubnetA
+  ProductionDmzSubnet2:
+    Condition: CreateProductionVPC
+    Value: !GetAtt ProductionVpcTemplate.Outputs.rDMZSubnetB
+  ProductionPrivateSubnet1:
+    Condition: CreateProductionVPC
+    Value: !GetAtt ProductionVpcTemplate.Outputs.rAppPrivateSubnetA
+  ProductionPrivateSubnet2:
+    Condition: CreateProductionVPC
+    Value: !GetAtt ProductionVpcTemplate.Outputs.rAppPrivateSubnetB
+
   CfnStacksIdStagingVpcTemplate:
     Condition: CreateStagingVPC
     Value: !GetAtt StagingVpcTemplate.Outputs.CfnStacksId
   CfnStacksVersionStagingVpcTemplate:
     Condition: CreateStagingVPC
     Value: !GetAtt StagingVpcTemplate.Outputs.CfnStacksVersion
+  StagingVpc:
+    Condition: CreateStagingVPC
+    Value: !GetAtt StagingVpcTemplate.Outputs.rVPCProduction
+  StagingDmzSubnet1:
+    Condition: CreateStagingVPC
+    Value: !GetAtt StagingVpcTemplate.Outputs.rDMZSubnetA
+  StagingDmzSubnet2:
+    Condition: CreateStagingVPC
+    Value: !GetAtt StagingVpcTemplate.Outputs.rDMZSubnetB
+  StagingPrivateSubnet1:
+    Condition: CreateStagingVPC
+    Value: !GetAtt StagingVpcTemplate.Outputs.rAppPrivateSubnetA
+  StagingPrivateSubnet2:
+    Condition: CreateStagingVPC
+    Value: !GetAtt StagingVpcTemplate.Outputs.rAppPrivateSubnetB
+
   CfnStacksIdTestVpcTemplate:
     Condition: CreateTestVPC
     Value: !GetAtt TestVpcTemplate.Outputs.CfnStacksId
   CfnStacksVersionTestVpcTemplate:
     Condition: CreateTestVPC
     Value: !GetAtt TestVpcTemplate.Outputs.CfnStacksVersion
+  TestVpc:
+    Condition: CreateTestVPC
+    Value: !GetAtt TestVpcTemplate.Outputs.rVPCProduction
+  TestDmzSubnet1:
+    Condition: CreateTestVPC
+    Value: !GetAtt TestVpcTemplate.Outputs.rDMZSubnetA
+  TestDmzSubnet2:
+    Condition: CreateTestVPC
+    Value: !GetAtt TestVpcTemplate.Outputs.rDMZSubnetB
+  TestPrivateSubnet1:
+    Condition: CreateTestVPC
+    Value: !GetAtt TestVpcTemplate.Outputs.rAppPrivateSubnetA
+  TestPrivateSubnet2:
+    Condition: CreateTestVPC
+    Value: !GetAtt TestVpcTemplate.Outputs.rAppPrivateSubnetB
+
   CfnStacksIdDevVpcTemplate:
     Condition: CreateDevVPC
     Value: !GetAtt DevVpcTemplate.Outputs.CfnStacksId
   CfnStacksVersionDevVpcTemplate:
     Condition: CreateDevVPC
     Value: !GetAtt DevVpcTemplate.Outputs.CfnStacksVersion
+  DevVpc:
+    Condition: CreateDevVPC
+    Value: !GetAtt DevVpcTemplate.Outputs.rVPCProduction
+  DevDmzSubnet1:
+    Condition: CreateDevVPC
+    Value: !GetAtt DevVpcTemplate.Outputs.rDMZSubnetA
+  DevDmzSubnet2:
+    Condition: CreateDevVPC
+    Value: !GetAtt DevVpcTemplate.Outputs.rDMZSubnetB
+  DevPrivateSubnet1:
+    Condition: CreateDevVPC
+    Value: !GetAtt DevVpcTemplate.Outputs.rAppPrivateSubnetA
+  DevPrivateSubnet2:
+    Condition: CreateDevVPC
+    Value: !GetAtt DevVpcTemplate.Outputs.rAppPrivateSubnetB
