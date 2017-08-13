@@ -398,6 +398,9 @@ Outputs:
   ProductionVpc:
     Condition: CreateProductionVPC
     Value: !GetAtt ProductionVpcTemplate.Outputs.rVPCProduction
+  ProductionVpcCidrBlock:
+    Condition: CreateProductionVPC
+    Value: !Ref ProductionVpcCidrBlock
   ProductionDmzSubnet1:
     Condition: CreateProductionVPC
     Value: !GetAtt ProductionVpcTemplate.Outputs.rDMZSubnetA
@@ -420,6 +423,9 @@ Outputs:
   StagingVpc:
     Condition: CreateStagingVPC
     Value: !GetAtt StagingVpcTemplate.Outputs.rVPCProduction
+  StagingVpcCidrBlock:
+    Condition: CreateStagingVPC
+    Value: !Ref StagingVpcCidrBlock
   StagingDmzSubnet1:
     Condition: CreateStagingVPC
     Value: !GetAtt StagingVpcTemplate.Outputs.rDMZSubnetA
@@ -442,6 +448,9 @@ Outputs:
   TestVpc:
     Condition: CreateTestVPC
     Value: !GetAtt TestVpcTemplate.Outputs.rVPCProduction
+  TestVpcCidrBlock:
+    Condition: CreateTestVPC
+    Value: !Ref TestVpcCidrBlock
   TestDmzSubnet1:
     Condition: CreateTestVPC
     Value: !GetAtt TestVpcTemplate.Outputs.rDMZSubnetA
@@ -464,6 +473,9 @@ Outputs:
   DevVpc:
     Condition: CreateDevVPC
     Value: !GetAtt DevVpcTemplate.Outputs.rVPCProduction
+  DevVpcCidrBlock:
+    Condition: CreateDevVPC
+    Value: !Ref DevelopmentVpcCidrBlock
   DevDmzSubnet1:
     Condition: CreateDevVPC
     Value: !GetAtt DevVpcTemplate.Outputs.rDMZSubnetA
