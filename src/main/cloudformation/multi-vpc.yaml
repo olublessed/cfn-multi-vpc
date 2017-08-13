@@ -379,6 +379,9 @@ Mappings:
       InstanceType: m4.large
       InstanceTypeDatabase: db.m4.large
 Outputs:
+  AmznLinuxHvmAMI:
+    Description: Amazon Linux AMI
+    Value: !FindInMap [ AWSAMIRegionMap, !Ref 'AWS::Region', AMZNLINUXHVM ]
   CfnStacksId:
     Description: cfn-stacks.com artifact id
     Value: @artifactId@
