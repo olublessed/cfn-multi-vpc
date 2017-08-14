@@ -5,7 +5,7 @@ aws {
 
 cloudFormation {
     templateFile = project.file('build/cloudformation/multi-vpc.yaml')
-    stackName = 'test-stack'
+    stackName = (artifacts3.stackName) ? artifacts3.stackName : 'test-stack'
     capabilityIam true
     onFailure 'ROLLBACK' // DO_NOTHING | ROLLBACK | DELETE
     conventionMapping.stackParams = {

@@ -6,14 +6,12 @@ plugins {
     id 'com.cfnstacks.gradle.artifacts3' version '0.1.1'
 }
 
-apply from: (hasProperty('deploy')) ? deploy : 'deploy-dev.groovy'
+group = 'com.cfnstacks'
+description = 'Multi-VPC Environment'
 
 def _profile = (hasProperty('profile')) ? profile : ''
 def _repo = (hasProperty('repo')) ? repo : 'cfn-stacks.com.s3.us-east-2.amazonaws.com'
 def _stack = (hasProperty('stack')) ? stack : cloudFormation.stackName
-
-group = 'com.cfnstacks'
-description = 'Multi-VPC Environment'
 
 artifacts3 {
     group = 'com.cfnstacks'
@@ -21,3 +19,5 @@ artifacts3 {
     repo = _repo
     stackName = _stack
 }
+
+apply from: (hasProperty('deploy')) ? deploy : 'deploy-dev.groovy'
