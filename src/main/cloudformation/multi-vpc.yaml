@@ -170,21 +170,25 @@ Resources:
       TimeoutInMinutes: 20
       Parameters:
         pProductionCIDR: !If [ CreateProductionVPC, !Sub "${ProductionVpcCidrBlock}.0.0/16", !Ref 'AWS::NoValue' ]
-        pProductionVPC: !If [ CreateProductionVPC, !GetAtt ProductionVpc.Outputs.rVPCProduction, !Ref 'AWS::NoValue' ]
-        pRouteTableProdPrivate: !If [ CreateProductionVPC, !GetAtt ProductionVpc.Outputs.rRouteTableProdPrivate, !Ref 'AWS::NoValue' ]
-        pRouteTableProdPublic: !If [ CreateProductionVPC, !GetAtt ProductionVpc.Outputs.rRouteTableProdPublic, !Ref 'AWS::NoValue' ]
+        pProductionVPC: !If [ CreateProductionVPC, !GetAtt ProductionVpc.Outputs.rVPC, !Ref 'AWS::NoValue' ]
+        pRouteTableProdPrivateA: !If [ CreateProductionVPC, !GetAtt ProductionVpc.Outputs.rRouteTablePrivateA, !Ref 'AWS::NoValue' ]
+        pRouteTableProdPrivateB: !If [ CreateProductionVPC, !GetAtt ProductionVpc.Outputs.rRouteTablePrivateB, !Ref 'AWS::NoValue' ]
+        pRouteTableProdDMZ: !If [ CreateProductionVPC, !GetAtt ProductionVpc.Outputs.rRouteTableDMZ, !Ref 'AWS::NoValue' ]
         pStagingCIDR: !If [ CreateStagingVPC, !Sub "${StagingVpcCidrBlock}.0.0/16", !Ref 'AWS::NoValue' ]
-        pStagingVPC: !If [ CreateStagingVPC, !GetAtt StagingVpc.Outputs.rVPCProduction, !Ref 'AWS::NoValue' ]
-        pRouteTableStagingPrivate: !If [ CreateStagingVPC, !GetAtt StagingVpc.Outputs.rRouteTableProdPrivate, !Ref 'AWS::NoValue' ]
-        pRouteTableStagingPublic: !If [ CreateStagingVPC, !GetAtt StagingVpc.Outputs.rRouteTableProdPublic, !Ref 'AWS::NoValue' ]
+        pStagingVPC: !If [ CreateStagingVPC, !GetAtt StagingVpc.Outputs.rVPC, !Ref 'AWS::NoValue' ]
+        pRouteTableStagingPrivateA: !If [ CreateStagingVPC, !GetAtt StagingVpc.Outputs.rRouteTablePrivateA, !Ref 'AWS::NoValue' ]
+        pRouteTableStagingPrivateB: !If [ CreateStagingVPC, !GetAtt StagingVpc.Outputs.rRouteTablePrivateB, !Ref 'AWS::NoValue' ]
+        pRouteTableStagingDMZ: !If [ CreateStagingVPC, !GetAtt StagingVpc.Outputs.rRouteTableDMZ, !Ref 'AWS::NoValue' ]
         pTestCIDR: !If [ CreateTestVPC, !Sub "${TestVpcCidrBlock}.0.0/16", !Ref 'AWS::NoValue' ]
-        pTestVPC: !If [ CreateTestVPC, !GetAtt TestVpc.Outputs.rVPCProduction, !Ref 'AWS::NoValue' ]
-        pRouteTableTestPrivate: !If [ CreateTestVPC, !GetAtt TestVpc.Outputs.rRouteTableProdPrivate, !Ref 'AWS::NoValue' ]
-        pRouteTableTestPublic: !If [ CreateTestVPC, !GetAtt TestVpc.Outputs.rRouteTableProdPublic, !Ref 'AWS::NoValue' ]
+        pTestVPC: !If [ CreateTestVPC, !GetAtt TestVpc.Outputs.rVPC, !Ref 'AWS::NoValue' ]
+        pRouteTableTestPrivateA: !If [ CreateTestVPC, !GetAtt TestVpc.Outputs.rRouteTablePrivateA, !Ref 'AWS::NoValue' ]
+        pRouteTableTestPrivateB: !If [ CreateTestVPC, !GetAtt TestVpc.Outputs.rRouteTablePrivateB, !Ref 'AWS::NoValue' ]
+        pRouteTableTestDMZ: !If [ CreateTestVPC, !GetAtt TestVpc.Outputs.rRouteTableDMZ, !Ref 'AWS::NoValue' ]
         pDevCIDR: !If [ CreateDevVPC, !Sub "${DevelopmentVpcCidrBlock}.0.0/16", !Ref 'AWS::NoValue' ]
-        pDevVPC: !If [ CreateDevVPC, !GetAtt DevVpc.Outputs.rVPCProduction, !Ref 'AWS::NoValue' ]
-        pRouteTableDevPrivate: !If [ CreateDevVPC, !GetAtt DevVpc.Outputs.rRouteTableProdPrivate, !Ref 'AWS::NoValue' ]
-        pRouteTableDevPublic: !If [ CreateDevVPC, !GetAtt DevVpc.Outputs.rRouteTableProdPublic, !Ref 'AWS::NoValue' ]
+        pDevVPC: !If [ CreateDevVPC, !GetAtt DevVpc.Outputs.rVPC, !Ref 'AWS::NoValue' ]
+        pRouteTableDevPrivateA: !If [ CreateDevVPC, !GetAtt DevVpc.Outputs.rRouteTablePrivateA, !Ref 'AWS::NoValue' ]
+        pRouteTableDevPrivateB: !If [ CreateDevVPC, !GetAtt DevVpc.Outputs.rRouteTablePrivateB, !Ref 'AWS::NoValue' ]
+        pRouteTableDevDMZ: !If [ CreateDevVPC, !GetAtt DevVpc.Outputs.rRouteTableDMZ, !Ref 'AWS::NoValue' ]
         pBastionSSHCIDR: !Ref allowedCIDR
         pManagementCIDR: !Sub "${ManagementVpcCidrBlock}.0.0/16"
         pManagementPrivateSubnetACIDR: !Sub "${ManagementVpcCidrBlock}.0.0/20"
@@ -396,7 +400,7 @@ Outputs:
     Value: !GetAtt ProductionVpc.Outputs.CfnStacksVersion
   ProductionVpc:
     Condition: CreateProductionVPC
-    Value: !GetAtt ProductionVpc.Outputs.rVPCProduction
+    Value: !GetAtt ProductionVpc.Outputs.rVPC
   ProductionVpcCidrBlock:
     Condition: CreateProductionVPC
     Value: !Sub '${ProductionVpcCidrBlock}.0.0/16'
@@ -421,7 +425,7 @@ Outputs:
     Value: !GetAtt StagingVpc.Outputs.CfnStacksVersion
   StagingVpc:
     Condition: CreateStagingVPC
-    Value: !GetAtt StagingVpc.Outputs.rVPCProduction
+    Value: !GetAtt StagingVpc.Outputs.rVPC
   StagingVpcCidrBlock:
     Condition: CreateStagingVPC
     Value: !Sub '${StagingVpcCidrBlock}.0.0/16'
@@ -446,7 +450,7 @@ Outputs:
     Value: !GetAtt TestVpc.Outputs.CfnStacksVersion
   TestVpc:
     Condition: CreateTestVPC
-    Value: !GetAtt TestVpc.Outputs.rVPCProduction
+    Value: !GetAtt TestVpc.Outputs.rVPC
   TestVpcCidrBlock:
     Condition: CreateTestVPC
     Value: !Sub '${TestVpcCidrBlock}.0.0/16'
@@ -471,7 +475,7 @@ Outputs:
     Value: !GetAtt DevVpc.Outputs.CfnStacksVersion
   DevVpc:
     Condition: CreateDevVPC
-    Value: !GetAtt DevVpc.Outputs.rVPCProduction
+    Value: !GetAtt DevVpc.Outputs.rVPC
   DevVpcCidrBlock:
     Condition: CreateDevVPC
     Value: !Sub '${DevelopmentVpcCidrBlock}.0.0/16'
