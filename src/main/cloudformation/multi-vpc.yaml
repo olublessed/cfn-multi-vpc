@@ -41,7 +41,6 @@ Parameters:
   InfraTemplates:
     Description: Key name prefix for infrastructure templates
     Type: String
-    Default: snapshot/com/cfnstacks/cfn-base-vpc/0.0.2-SNAPSHOT
   bCreateProductionVPC:
     Description: Should the Production VPC get created?
     Type: String
@@ -75,12 +74,12 @@ Conditions:
   CreateDevVPC: !Equals [ true, !Ref bCreateDevVPC]
   LoadConfigRulesTemplate: !Equals [ true, !FindInMap [ RegionServiceSupport, !Ref 'AWS::Region', ConfigRules ] ]
 Resources:
-  IamTemplate:
+  Iam:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
       TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/iam.yaml'
       TimeoutInMinutes: 20
-  LoggingTemplate:
+  Logging:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
       TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/logging.yaml'
@@ -88,18 +87,18 @@ Resources:
       Parameters:
         pNotifyEmail: !Ref NotificationEmail
         pSupportsGlacier: !FindInMap [ RegionServiceSupport, !Ref 'AWS::Region', Glacier ]
-  ProductionVpcTemplate:
+  ProductionVpc:
     Type: 'AWS::CloudFormation::Stack'
     Condition: CreateProductionVPC
     Properties:
-      TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/vpc-production.yaml'
+      TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/vpc-environment.yaml'
       TimeoutInMinutes: 20
       Parameters:
-        pProductionVPCName: !Sub "${ProjectName} Production VPC"
+        pVPCName: !Sub "${ProjectName} Production VPC"
         pRegionAZ1Name: !Ref AvailabilityZone1
         pRegionAZ2Name: !Ref AvailabilityZone2
         pManagementCIDR: !Sub "${ManagementVpcCidrBlock}.0.0/16"
-        pProductionCIDR: !Sub "${ProductionVpcCidrBlock}.0.0/16"
+        pCIDR: !Sub "${ProductionVpcCidrBlock}.0.0/16"
         pAppPrivateSubnetACIDR: !Sub "${ProductionVpcCidrBlock}.0.0/20"
         pAppPrivateSubnetBCIDR: !Sub "${ProductionVpcCidrBlock}.16.0/20"
         pDBPrivateSubnetACIDR: !Sub "${ProductionVpcCidrBlock}.32.0/24"
@@ -107,18 +106,18 @@ Resources:
         pDMZSubnetACIDR: !Sub "${ProductionVpcCidrBlock}.34.0/24"
         pDMZSubnetBCIDR: !Sub "${ProductionVpcCidrBlock}.35.0/24"
         pTemplates: !Sub "${StackTemplates}/${InfraTemplates}"
-  StagingVpcTemplate:
+  StagingVpc:
     Type: 'AWS::CloudFormation::Stack'
     Condition: CreateStagingVPC
     Properties:
-      TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/vpc-production.yaml'
+      TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/vpc-environment.yaml'
       TimeoutInMinutes: 20
       Parameters:
-        pProductionVPCName: !Sub "${ProjectName} Staging VPC"
+        pVPCName: !Sub "${ProjectName} Staging VPC"
         pRegionAZ1Name: !Ref AvailabilityZone1
         pRegionAZ2Name: !Ref AvailabilityZone2
         pManagementCIDR: !Sub "${ManagementVpcCidrBlock}.0.0/16"
-        pProductionCIDR: !Sub "${StagingVpcCidrBlock}.0.0/16"
+        pCIDR: !Sub "${StagingVpcCidrBlock}.0.0/16"
         pAppPrivateSubnetACIDR: !Sub "${StagingVpcCidrBlock}.0.0/20"
         pAppPrivateSubnetBCIDR: !Sub "${StagingVpcCidrBlock}.16.0/20"
         pDBPrivateSubnetACIDR: !Sub "${StagingVpcCidrBlock}.32.0/24"
@@ -126,18 +125,18 @@ Resources:
         pDMZSubnetACIDR: !Sub "${StagingVpcCidrBlock}.34.0/24"
         pDMZSubnetBCIDR: !Sub "${StagingVpcCidrBlock}.35.0/24"
         pTemplates: !Sub "${StackTemplates}/${InfraTemplates}"
-  TestVpcTemplate:
+  TestVpc:
     Type: 'AWS::CloudFormation::Stack'
     Condition: CreateTestVPC
     Properties:
-      TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/vpc-production.yaml'
+      TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/vpc-environment.yaml'
       TimeoutInMinutes: 20
       Parameters:
-        pProductionVPCName: !Sub "${ProjectName} Test VPC"
+        pVPCName: !Sub "${ProjectName} Test VPC"
         pRegionAZ1Name: !Ref AvailabilityZone1
         pRegionAZ2Name: !Ref AvailabilityZone2
         pManagementCIDR: !Sub "${ManagementVpcCidrBlock}.0.0/16"
-        pProductionCIDR: !Sub "${TestVpcCidrBlock}.0.0/16"
+        pCIDR: !Sub "${TestVpcCidrBlock}.0.0/16"
         pAppPrivateSubnetACIDR: !Sub "${TestVpcCidrBlock}.0.0/20"
         pAppPrivateSubnetBCIDR: !Sub "${TestVpcCidrBlock}.16.0/20"
         pDBPrivateSubnetACIDR: !Sub "${TestVpcCidrBlock}.32.0/24"
@@ -145,18 +144,18 @@ Resources:
         pDMZSubnetACIDR: !Sub "${TestVpcCidrBlock}.34.0/24"
         pDMZSubnetBCIDR: !Sub "${TestVpcCidrBlock}.35.0/24"
         pTemplates: !Sub "${StackTemplates}/${InfraTemplates}"
-  DevVpcTemplate:
+  DevVpc:
     Type: 'AWS::CloudFormation::Stack'
     Condition: CreateDevVPC
     Properties:
-      TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/vpc-production.yaml'
+      TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/vpc-environment.yaml'
       TimeoutInMinutes: 20
       Parameters:
-        pProductionVPCName: !Sub "${ProjectName} Dev VPC"
+        pVPCName: !Sub "${ProjectName} Dev VPC"
         pRegionAZ1Name: !Ref AvailabilityZone1
         pRegionAZ2Name: !Ref AvailabilityZone2
         pManagementCIDR: !Sub "${ManagementVpcCidrBlock}.0.0/16"
-        pProductionCIDR: !Sub "${DevelopmentVpcCidrBlock}.0.0/16"
+        pCIDR: !Sub "${DevelopmentVpcCidrBlock}.0.0/16"
         pAppPrivateSubnetACIDR: !Sub "${DevelopmentVpcCidrBlock}.0.0/20"
         pAppPrivateSubnetBCIDR: !Sub "${DevelopmentVpcCidrBlock}.16.0/20"
         pDBPrivateSubnetACIDR: !Sub "${DevelopmentVpcCidrBlock}.32.0/24"
@@ -164,28 +163,28 @@ Resources:
         pDMZSubnetACIDR: !Sub "${DevelopmentVpcCidrBlock}.34.0/24"
         pDMZSubnetBCIDR: !Sub "${DevelopmentVpcCidrBlock}.35.0/24"
         pTemplates: !Sub "${StackTemplates}/${InfraTemplates}"
-  ManagementVpcTemplate:
+  ManagementVpc:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
       TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/vpc-management.yaml'
       TimeoutInMinutes: 20
       Parameters:
         pProductionCIDR: !If [ CreateProductionVPC, !Sub "${ProductionVpcCidrBlock}.0.0/16", !Ref 'AWS::NoValue' ]
-        pProductionVPC: !If [ CreateProductionVPC, !GetAtt ProductionVpcTemplate.Outputs.rVPCProduction, !Ref 'AWS::NoValue' ]
-        pRouteTableProdPrivate: !If [ CreateProductionVPC, !GetAtt ProductionVpcTemplate.Outputs.rRouteTableProdPrivate, !Ref 'AWS::NoValue' ]
-        pRouteTableProdPublic: !If [ CreateProductionVPC, !GetAtt ProductionVpcTemplate.Outputs.rRouteTableProdPublic, !Ref 'AWS::NoValue' ]
+        pProductionVPC: !If [ CreateProductionVPC, !GetAtt ProductionVpc.Outputs.rVPCProduction, !Ref 'AWS::NoValue' ]
+        pRouteTableProdPrivate: !If [ CreateProductionVPC, !GetAtt ProductionVpc.Outputs.rRouteTableProdPrivate, !Ref 'AWS::NoValue' ]
+        pRouteTableProdPublic: !If [ CreateProductionVPC, !GetAtt ProductionVpc.Outputs.rRouteTableProdPublic, !Ref 'AWS::NoValue' ]
         pStagingCIDR: !If [ CreateStagingVPC, !Sub "${StagingVpcCidrBlock}.0.0/16", !Ref 'AWS::NoValue' ]
-        pStagingVPC: !If [ CreateStagingVPC, !GetAtt StagingVpcTemplate.Outputs.rVPCProduction, !Ref 'AWS::NoValue' ]
-        pRouteTableStagingPrivate: !If [ CreateStagingVPC, !GetAtt StagingVpcTemplate.Outputs.rRouteTableProdPrivate, !Ref 'AWS::NoValue' ]
-        pRouteTableStagingPublic: !If [ CreateStagingVPC, !GetAtt StagingVpcTemplate.Outputs.rRouteTableProdPublic, !Ref 'AWS::NoValue' ]
+        pStagingVPC: !If [ CreateStagingVPC, !GetAtt StagingVpc.Outputs.rVPCProduction, !Ref 'AWS::NoValue' ]
+        pRouteTableStagingPrivate: !If [ CreateStagingVPC, !GetAtt StagingVpc.Outputs.rRouteTableProdPrivate, !Ref 'AWS::NoValue' ]
+        pRouteTableStagingPublic: !If [ CreateStagingVPC, !GetAtt StagingVpc.Outputs.rRouteTableProdPublic, !Ref 'AWS::NoValue' ]
         pTestCIDR: !If [ CreateTestVPC, !Sub "${TestVpcCidrBlock}.0.0/16", !Ref 'AWS::NoValue' ]
-        pTestVPC: !If [ CreateTestVPC, !GetAtt TestVpcTemplate.Outputs.rVPCProduction, !Ref 'AWS::NoValue' ]
-        pRouteTableTestPrivate: !If [ CreateTestVPC, !GetAtt TestVpcTemplate.Outputs.rRouteTableProdPrivate, !Ref 'AWS::NoValue' ]
-        pRouteTableTestPublic: !If [ CreateTestVPC, !GetAtt TestVpcTemplate.Outputs.rRouteTableProdPublic, !Ref 'AWS::NoValue' ]
+        pTestVPC: !If [ CreateTestVPC, !GetAtt TestVpc.Outputs.rVPCProduction, !Ref 'AWS::NoValue' ]
+        pRouteTableTestPrivate: !If [ CreateTestVPC, !GetAtt TestVpc.Outputs.rRouteTableProdPrivate, !Ref 'AWS::NoValue' ]
+        pRouteTableTestPublic: !If [ CreateTestVPC, !GetAtt TestVpc.Outputs.rRouteTableProdPublic, !Ref 'AWS::NoValue' ]
         pDevCIDR: !If [ CreateDevVPC, !Sub "${DevelopmentVpcCidrBlock}.0.0/16", !Ref 'AWS::NoValue' ]
-        pDevVPC: !If [ CreateDevVPC, !GetAtt DevVpcTemplate.Outputs.rVPCProduction, !Ref 'AWS::NoValue' ]
-        pRouteTableDevPrivate: !If [ CreateDevVPC, !GetAtt DevVpcTemplate.Outputs.rRouteTableProdPrivate, !Ref 'AWS::NoValue' ]
-        pRouteTableDevPublic: !If [ CreateDevVPC, !GetAtt DevVpcTemplate.Outputs.rRouteTableProdPublic, !Ref 'AWS::NoValue' ]
+        pDevVPC: !If [ CreateDevVPC, !GetAtt DevVpc.Outputs.rVPCProduction, !Ref 'AWS::NoValue' ]
+        pRouteTableDevPrivate: !If [ CreateDevVPC, !GetAtt DevVpc.Outputs.rRouteTableProdPrivate, !Ref 'AWS::NoValue' ]
+        pRouteTableDevPublic: !If [ CreateDevVPC, !GetAtt DevVpc.Outputs.rRouteTableProdPublic, !Ref 'AWS::NoValue' ]
         pBastionSSHCIDR: !Ref allowedCIDR
         pManagementCIDR: !Sub "${ManagementVpcCidrBlock}.0.0/16"
         pManagementPrivateSubnetACIDR: !Sub "${ManagementVpcCidrBlock}.0.0/20"
@@ -391,100 +390,100 @@ Outputs:
 
   CfnStacksIdProductionVpcTemplate:
     Condition: CreateProductionVPC
-    Value: !GetAtt ProductionVpcTemplate.Outputs.CfnStacksId
+    Value: !GetAtt ProductionVpc.Outputs.CfnStacksId
   CfnStacksVersionProductionVpcTemplate:
     Condition: CreateProductionVPC
-    Value: !GetAtt ProductionVpcTemplate.Outputs.CfnStacksVersion
+    Value: !GetAtt ProductionVpc.Outputs.CfnStacksVersion
   ProductionVpc:
     Condition: CreateProductionVPC
-    Value: !GetAtt ProductionVpcTemplate.Outputs.rVPCProduction
+    Value: !GetAtt ProductionVpc.Outputs.rVPCProduction
   ProductionVpcCidrBlock:
     Condition: CreateProductionVPC
     Value: !Sub '${ProductionVpcCidrBlock}.0.0/16'
   ProductionDmzSubnet1:
     Condition: CreateProductionVPC
-    Value: !GetAtt ProductionVpcTemplate.Outputs.rDMZSubnetA
+    Value: !GetAtt ProductionVpc.Outputs.rDMZSubnetA
   ProductionDmzSubnet2:
     Condition: CreateProductionVPC
-    Value: !GetAtt ProductionVpcTemplate.Outputs.rDMZSubnetB
+    Value: !GetAtt ProductionVpc.Outputs.rDMZSubnetB
   ProductionPrivateSubnet1:
     Condition: CreateProductionVPC
-    Value: !GetAtt ProductionVpcTemplate.Outputs.rAppPrivateSubnetA
+    Value: !GetAtt ProductionVpc.Outputs.rAppPrivateSubnetA
   ProductionPrivateSubnet2:
     Condition: CreateProductionVPC
-    Value: !GetAtt ProductionVpcTemplate.Outputs.rAppPrivateSubnetB
+    Value: !GetAtt ProductionVpc.Outputs.rAppPrivateSubnetB
 
   CfnStacksIdStagingVpcTemplate:
     Condition: CreateStagingVPC
-    Value: !GetAtt StagingVpcTemplate.Outputs.CfnStacksId
+    Value: !GetAtt StagingVpc.Outputs.CfnStacksId
   CfnStacksVersionStagingVpcTemplate:
     Condition: CreateStagingVPC
-    Value: !GetAtt StagingVpcTemplate.Outputs.CfnStacksVersion
+    Value: !GetAtt StagingVpc.Outputs.CfnStacksVersion
   StagingVpc:
     Condition: CreateStagingVPC
-    Value: !GetAtt StagingVpcTemplate.Outputs.rVPCProduction
+    Value: !GetAtt StagingVpc.Outputs.rVPCProduction
   StagingVpcCidrBlock:
     Condition: CreateStagingVPC
     Value: !Sub '${StagingVpcCidrBlock}.0.0/16'
   StagingDmzSubnet1:
     Condition: CreateStagingVPC
-    Value: !GetAtt StagingVpcTemplate.Outputs.rDMZSubnetA
+    Value: !GetAtt StagingVpc.Outputs.rDMZSubnetA
   StagingDmzSubnet2:
     Condition: CreateStagingVPC
-    Value: !GetAtt StagingVpcTemplate.Outputs.rDMZSubnetB
+    Value: !GetAtt StagingVpc.Outputs.rDMZSubnetB
   StagingPrivateSubnet1:
     Condition: CreateStagingVPC
-    Value: !GetAtt StagingVpcTemplate.Outputs.rAppPrivateSubnetA
+    Value: !GetAtt StagingVpc.Outputs.rAppPrivateSubnetA
   StagingPrivateSubnet2:
     Condition: CreateStagingVPC
-    Value: !GetAtt StagingVpcTemplate.Outputs.rAppPrivateSubnetB
+    Value: !GetAtt StagingVpc.Outputs.rAppPrivateSubnetB
 
   CfnStacksIdTestVpcTemplate:
     Condition: CreateTestVPC
-    Value: !GetAtt TestVpcTemplate.Outputs.CfnStacksId
+    Value: !GetAtt TestVpc.Outputs.CfnStacksId
   CfnStacksVersionTestVpcTemplate:
     Condition: CreateTestVPC
-    Value: !GetAtt TestVpcTemplate.Outputs.CfnStacksVersion
+    Value: !GetAtt TestVpc.Outputs.CfnStacksVersion
   TestVpc:
     Condition: CreateTestVPC
-    Value: !GetAtt TestVpcTemplate.Outputs.rVPCProduction
+    Value: !GetAtt TestVpc.Outputs.rVPCProduction
   TestVpcCidrBlock:
     Condition: CreateTestVPC
     Value: !Sub '${TestVpcCidrBlock}.0.0/16'
   TestDmzSubnet1:
     Condition: CreateTestVPC
-    Value: !GetAtt TestVpcTemplate.Outputs.rDMZSubnetA
+    Value: !GetAtt TestVpc.Outputs.rDMZSubnetA
   TestDmzSubnet2:
     Condition: CreateTestVPC
-    Value: !GetAtt TestVpcTemplate.Outputs.rDMZSubnetB
+    Value: !GetAtt TestVpc.Outputs.rDMZSubnetB
   TestPrivateSubnet1:
     Condition: CreateTestVPC
-    Value: !GetAtt TestVpcTemplate.Outputs.rAppPrivateSubnetA
+    Value: !GetAtt TestVpc.Outputs.rAppPrivateSubnetA
   TestPrivateSubnet2:
     Condition: CreateTestVPC
-    Value: !GetAtt TestVpcTemplate.Outputs.rAppPrivateSubnetB
+    Value: !GetAtt TestVpc.Outputs.rAppPrivateSubnetB
 
   CfnStacksIdDevVpcTemplate:
     Condition: CreateDevVPC
-    Value: !GetAtt DevVpcTemplate.Outputs.CfnStacksId
+    Value: !GetAtt DevVpc.Outputs.CfnStacksId
   CfnStacksVersionDevVpcTemplate:
     Condition: CreateDevVPC
-    Value: !GetAtt DevVpcTemplate.Outputs.CfnStacksVersion
+    Value: !GetAtt DevVpc.Outputs.CfnStacksVersion
   DevVpc:
     Condition: CreateDevVPC
-    Value: !GetAtt DevVpcTemplate.Outputs.rVPCProduction
+    Value: !GetAtt DevVpc.Outputs.rVPCProduction
   DevVpcCidrBlock:
     Condition: CreateDevVPC
     Value: !Sub '${DevelopmentVpcCidrBlock}.0.0/16'
   DevDmzSubnet1:
     Condition: CreateDevVPC
-    Value: !GetAtt DevVpcTemplate.Outputs.rDMZSubnetA
+    Value: !GetAtt DevVpc.Outputs.rDMZSubnetA
   DevDmzSubnet2:
     Condition: CreateDevVPC
-    Value: !GetAtt DevVpcTemplate.Outputs.rDMZSubnetB
+    Value: !GetAtt DevVpc.Outputs.rDMZSubnetB
   DevPrivateSubnet1:
     Condition: CreateDevVPC
-    Value: !GetAtt DevVpcTemplate.Outputs.rAppPrivateSubnetA
+    Value: !GetAtt DevVpc.Outputs.rAppPrivateSubnetA
   DevPrivateSubnet2:
     Condition: CreateDevVPC
-    Value: !GetAtt DevVpcTemplate.Outputs.rAppPrivateSubnetB
+    Value: !GetAtt DevVpc.Outputs.rAppPrivateSubnetB
