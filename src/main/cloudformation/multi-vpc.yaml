@@ -392,6 +392,13 @@ Outputs:
     Description: cfn-stacks.com artifact version
     Value: v@version@
 
+  CfnStacksIdManagementVpcTemplate:
+    Value: !GetAtt ManagementVpc.Outputs.CfnStacksId
+  CfnStacksVersionManagementVpcTemplate:
+    Value: !GetAtt ManagementVpc.Outputs.CfnStacksVersion
+  ManagementVpcCIDR:
+    Value: !GetAtt ManagementVpc.Outputs.rVPCManagementCIDR
+
   CfnStacksIdProductionVpcTemplate:
     Condition: CreateProductionVPC
     Value: !GetAtt ProductionVpc.Outputs.CfnStacksId
@@ -404,16 +411,16 @@ Outputs:
   ProductionVpcCidrBlock:
     Condition: CreateProductionVPC
     Value: !Sub '${ProductionVpcCidrBlock}.0.0/16'
-  ProductionDmzSubnet1:
+  ProductionDmzSubnetA:
     Condition: CreateProductionVPC
     Value: !GetAtt ProductionVpc.Outputs.rDMZSubnetA
-  ProductionDmzSubnet2:
+  ProductionDmzSubnetB:
     Condition: CreateProductionVPC
     Value: !GetAtt ProductionVpc.Outputs.rDMZSubnetB
-  ProductionPrivateSubnet1:
+  ProductionPrivateSubnetA:
     Condition: CreateProductionVPC
     Value: !GetAtt ProductionVpc.Outputs.rAppPrivateSubnetA
-  ProductionPrivateSubnet2:
+  ProductionPrivateSubnetB:
     Condition: CreateProductionVPC
     Value: !GetAtt ProductionVpc.Outputs.rAppPrivateSubnetB
 
@@ -429,16 +436,16 @@ Outputs:
   StagingVpcCidrBlock:
     Condition: CreateStagingVPC
     Value: !Sub '${StagingVpcCidrBlock}.0.0/16'
-  StagingDmzSubnet1:
+  StagingDmzSubnetA:
     Condition: CreateStagingVPC
     Value: !GetAtt StagingVpc.Outputs.rDMZSubnetA
-  StagingDmzSubnet2:
+  StagingDmzSubnetB:
     Condition: CreateStagingVPC
     Value: !GetAtt StagingVpc.Outputs.rDMZSubnetB
-  StagingPrivateSubnet1:
+  StagingPrivateSubnetA:
     Condition: CreateStagingVPC
     Value: !GetAtt StagingVpc.Outputs.rAppPrivateSubnetA
-  StagingPrivateSubnet2:
+  StagingPrivateSubnetB:
     Condition: CreateStagingVPC
     Value: !GetAtt StagingVpc.Outputs.rAppPrivateSubnetB
 
@@ -454,16 +461,16 @@ Outputs:
   TestVpcCidrBlock:
     Condition: CreateTestVPC
     Value: !Sub '${TestVpcCidrBlock}.0.0/16'
-  TestDmzSubnet1:
+  TestDmzSubnetA:
     Condition: CreateTestVPC
     Value: !GetAtt TestVpc.Outputs.rDMZSubnetA
-  TestDmzSubnet2:
+  TestDmzSubnetB:
     Condition: CreateTestVPC
     Value: !GetAtt TestVpc.Outputs.rDMZSubnetB
-  TestPrivateSubnet1:
+  TestPrivateSubnetA:
     Condition: CreateTestVPC
     Value: !GetAtt TestVpc.Outputs.rAppPrivateSubnetA
-  TestPrivateSubnet2:
+  TestPrivateSubnetB:
     Condition: CreateTestVPC
     Value: !GetAtt TestVpc.Outputs.rAppPrivateSubnetB
 
@@ -479,15 +486,15 @@ Outputs:
   DevVpcCidrBlock:
     Condition: CreateDevVPC
     Value: !Sub '${DevelopmentVpcCidrBlock}.0.0/16'
-  DevDmzSubnet1:
+  DevDmzSubnetA:
     Condition: CreateDevVPC
     Value: !GetAtt DevVpc.Outputs.rDMZSubnetA
-  DevDmzSubnet2:
+  DevDmzSubnetB:
     Condition: CreateDevVPC
     Value: !GetAtt DevVpc.Outputs.rDMZSubnetB
-  DevPrivateSubnet1:
+  DevPrivateSubnetA:
     Condition: CreateDevVPC
     Value: !GetAtt DevVpc.Outputs.rAppPrivateSubnetA
-  DevPrivateSubnet2:
+  DevPrivateSubnetB:
     Condition: CreateDevVPC
     Value: !GetAtt DevVpc.Outputs.rAppPrivateSubnetB
