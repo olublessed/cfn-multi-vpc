@@ -392,19 +392,9 @@ Outputs:
     Description: cfn-stacks.com artifact version
     Value: v@version@
 
-  CfnStacksIdManagementVpcTemplate:
-    Value: !GetAtt ManagementVpc.Outputs.CfnStacksId
-  CfnStacksVersionManagementVpcTemplate:
-    Value: !GetAtt ManagementVpc.Outputs.CfnStacksVersion
   ManagementVpcCIDR:
     Value: !GetAtt ManagementVpc.Outputs.rVPCManagementCIDR
 
-  CfnStacksIdProductionVpcTemplate:
-    Condition: CreateProductionVPC
-    Value: !GetAtt ProductionVpc.Outputs.CfnStacksId
-  CfnStacksVersionProductionVpcTemplate:
-    Condition: CreateProductionVPC
-    Value: !GetAtt ProductionVpc.Outputs.CfnStacksVersion
   ProductionVpc:
     Condition: CreateProductionVPC
     Value: !GetAtt ProductionVpc.Outputs.rVPC
@@ -414,22 +404,40 @@ Outputs:
   ProductionDmzSubnetA:
     Condition: CreateProductionVPC
     Value: !GetAtt ProductionVpc.Outputs.rDMZSubnetA
+  ProductionDmzSubnetACIDR:
+    Condition: CreateProductionVPC
+    Value: !GetAtt ProductionVpc.Outputs.rDMZSubnetACIDR
   ProductionDmzSubnetB:
     Condition: CreateProductionVPC
     Value: !GetAtt ProductionVpc.Outputs.rDMZSubnetB
+  ProductionDmzSubnetBCIDR:
+    Condition: CreateProductionVPC
+    Value: !GetAtt ProductionVpc.Outputs.rDMZSubnetBCIDR
   ProductionPrivateSubnetA:
     Condition: CreateProductionVPC
     Value: !GetAtt ProductionVpc.Outputs.rAppPrivateSubnetA
+  ProductionPrivateSubnetACIDR:
+    Condition: CreateProductionVPC
+    Value: !GetAtt ProductionVpc.Outputs.rAppPrivateSubnetACIDR
   ProductionPrivateSubnetB:
     Condition: CreateProductionVPC
     Value: !GetAtt ProductionVpc.Outputs.rAppPrivateSubnetB
+  ProductionPrivateSubnetBCIDR:
+    Condition: CreateProductionVPC
+    Value: !GetAtt ProductionVpc.Outputs.rAppPrivateSubnetBCIDR
+  ProductionDBPrivateSubnetA:
+    Condition: CreateProductionVPC
+    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetA
+  ProductionDBPrivateSubnetACIDR:
+    Condition: CreateProductionVPC
+    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetACIDR
+  ProductionDBPrivateSubnetB:
+    Condition: CreateProductionVPC
+    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetB
+  ProductionDBPrivateSubnetBCIDR:
+    Condition: CreateProductionVPC
+    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetBCIDR
 
-  CfnStacksIdStagingVpcTemplate:
-    Condition: CreateStagingVPC
-    Value: !GetAtt StagingVpc.Outputs.CfnStacksId
-  CfnStacksVersionStagingVpcTemplate:
-    Condition: CreateStagingVPC
-    Value: !GetAtt StagingVpc.Outputs.CfnStacksVersion
   StagingVpc:
     Condition: CreateStagingVPC
     Value: !GetAtt StagingVpc.Outputs.rVPC
@@ -439,22 +447,40 @@ Outputs:
   StagingDmzSubnetA:
     Condition: CreateStagingVPC
     Value: !GetAtt StagingVpc.Outputs.rDMZSubnetA
+  StagingDmzSubnetACIDR:
+    Condition: CreateStagingVPC
+    Value: !GetAtt StagingVpc.Outputs.rDMZSubnetACIDR
   StagingDmzSubnetB:
     Condition: CreateStagingVPC
     Value: !GetAtt StagingVpc.Outputs.rDMZSubnetB
+  StagingDmzSubnetBCIDR:
+    Condition: CreateStagingVPC
+    Value: !GetAtt StagingVpc.Outputs.rDMZSubnetBCIDR
   StagingPrivateSubnetA:
     Condition: CreateStagingVPC
     Value: !GetAtt StagingVpc.Outputs.rAppPrivateSubnetA
+  StagingPrivateSubnetACIDR:
+    Condition: CreateStagingVPC
+    Value: !GetAtt StagingVpc.Outputs.rAppPrivateSubnetACIDR
   StagingPrivateSubnetB:
     Condition: CreateStagingVPC
     Value: !GetAtt StagingVpc.Outputs.rAppPrivateSubnetB
+  StagingPrivateSubnetBCIDR:
+    Condition: CreateStagingVPC
+    Value: !GetAtt StagingVpc.Outputs.rAppPrivateSubnetBCIDR
+  StagingDBPrivateSubnetA:
+    Condition: CreateStagingVPC
+    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetA
+  StagingDBPrivateSubnetACIDR:
+    Condition: CreateStagingVPC
+    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetACIDR
+  StagingDBPrivateSubnetB:
+    Condition: CreateStagingVPC
+    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetB
+  StagingDBPrivateSubnetBCIDR:
+    Condition: CreateStagingVPC
+    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetBCIDR
 
-  CfnStacksIdTestVpcTemplate:
-    Condition: CreateTestVPC
-    Value: !GetAtt TestVpc.Outputs.CfnStacksId
-  CfnStacksVersionTestVpcTemplate:
-    Condition: CreateTestVPC
-    Value: !GetAtt TestVpc.Outputs.CfnStacksVersion
   TestVpc:
     Condition: CreateTestVPC
     Value: !GetAtt TestVpc.Outputs.rVPC
@@ -464,22 +490,40 @@ Outputs:
   TestDmzSubnetA:
     Condition: CreateTestVPC
     Value: !GetAtt TestVpc.Outputs.rDMZSubnetA
+  TestDmzSubnetACIDR:
+    Condition: CreateTestVPC
+    Value: !GetAtt TestVpc.Outputs.rDMZSubnetACIDR
   TestDmzSubnetB:
     Condition: CreateTestVPC
     Value: !GetAtt TestVpc.Outputs.rDMZSubnetB
+  TestDmzSubnetBCIDR:
+    Condition: CreateTestVPC
+    Value: !GetAtt TestVpc.Outputs.rDMZSubnetBCIDR
   TestPrivateSubnetA:
     Condition: CreateTestVPC
     Value: !GetAtt TestVpc.Outputs.rAppPrivateSubnetA
+  TestPrivateSubnetACIDR:
+    Condition: CreateTestVPC
+    Value: !GetAtt TestVpc.Outputs.rAppPrivateSubnetACIDR
   TestPrivateSubnetB:
     Condition: CreateTestVPC
     Value: !GetAtt TestVpc.Outputs.rAppPrivateSubnetB
+  TestPrivateSubnetBCIDR:
+    Condition: CreateTestVPC
+    Value: !GetAtt TestVpc.Outputs.rAppPrivateSubnetBCIDR
+  TestDBPrivateSubnetA:
+    Condition: CreateTestVPC
+    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetA
+  TestDBPrivateSubnetACIDR:
+    Condition: CreateTestVPC
+    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetACIDR
+  TestDBPrivateSubnetB:
+    Condition: CreateTestVPC
+    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetB
+  TestDBPrivateSubnetBCIDR:
+    Condition: CreateTestVPC
+    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetBCIDR
 
-  CfnStacksIdDevVpcTemplate:
-    Condition: CreateDevVPC
-    Value: !GetAtt DevVpc.Outputs.CfnStacksId
-  CfnStacksVersionDevVpcTemplate:
-    Condition: CreateDevVPC
-    Value: !GetAtt DevVpc.Outputs.CfnStacksVersion
   DevVpc:
     Condition: CreateDevVPC
     Value: !GetAtt DevVpc.Outputs.rVPC
@@ -489,12 +533,36 @@ Outputs:
   DevDmzSubnetA:
     Condition: CreateDevVPC
     Value: !GetAtt DevVpc.Outputs.rDMZSubnetA
+  DevDmzSubnetACIDR:
+    Condition: CreateDevVPC
+    Value: !GetAtt DevVpc.Outputs.rDMZSubnetACIDR
   DevDmzSubnetB:
     Condition: CreateDevVPC
     Value: !GetAtt DevVpc.Outputs.rDMZSubnetB
+  DevDmzSubnetBCIDR:
+    Condition: CreateDevVPC
+    Value: !GetAtt DevVpc.Outputs.rDMZSubnetBCIDR
   DevPrivateSubnetA:
     Condition: CreateDevVPC
     Value: !GetAtt DevVpc.Outputs.rAppPrivateSubnetA
+  DevPrivateSubnetACIDR:
+    Condition: CreateDevVPC
+    Value: !GetAtt DevVpc.Outputs.rAppPrivateSubnetACIDR
   DevPrivateSubnetB:
     Condition: CreateDevVPC
     Value: !GetAtt DevVpc.Outputs.rAppPrivateSubnetB
+  DevPrivateSubnetBCIDR:
+    Condition: CreateDevVPC
+    Value: !GetAtt DevVpc.Outputs.rAppPrivateSubnetBCIDR
+  DevDBPrivateSubnetA:
+    Condition: CreateDevVPC
+    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetA
+  DevDBPrivateSubnetACIDR:
+    Condition: CreateDevVPC
+    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetACIDR
+  DevDBPrivateSubnetB:
+    Condition: CreateDevVPC
+    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetB
+  DevDBPrivateSubnetBCIDR:
+    Condition: CreateDevVPC
+    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetBCIDR
