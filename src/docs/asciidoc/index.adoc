@@ -1,0 +1,39 @@
+= Multi VPC
+v{projectVersion}
+
+== Overview
+
+This template builds upon the base infrastructure components and creates an environment as described in the https://github.com/aws-quickstart/quickstart-enterprise-accelerator-nist[AWS Quickstart]
+but has four VPCs defined (dev/test/stage/prod) in addition to the management VPC.
+
+== Diagram
+
+image:aws-quickstart-architecture.png[link=images/aws-quickstart-architecture.png]
+
+=== Prerequisite
+
+* http://www.oracle.com/technetwork/pt/java/javase/downloads/index.html[Java 8 JDK^]: Download from Oracle or
+    use a packaged version for your OS
+
+== Tool Links
+
+* http://asciidoctor.org/[Asciidoctor^]
+* https://aws.amazon.com/cloudformation/[CloudFormation^]
+* https://git-scm.com/[Git^]
+* https://gradle.org/[Gradle^]
+
+== Documentation Links
+
+ifdef::backend-html5[]
+=== icon:file-code-o[] https://cfn-stacks.com/docs/index.html[Web^]
+=== icon:file-pdf-o[] pass:[<a href="./cfn-multi-vpc.pdf" target="_blank">PDF</a>]
+=== icon:git[] https://github.com/cfn-stacks/cfn-multi-vpc[Source^]
+endif::backend-html5[]
+ifdef::backend-pdf[]
+=== https://cfn-stacks.com/docs/index.html[Web^]
+=== https://github.com/cfn-stacks/cfn-multi-vpc[Source^]
+endif::backend-pdf[]
+
+== Version
+
+This documentation was generated for version {projectVersion}

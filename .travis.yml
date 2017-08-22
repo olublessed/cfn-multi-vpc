@@ -1,6 +1,7 @@
 language: java
 install: echo "skip 'gradle assemble' step"
 script: ./gradlew publish
+after_success: ./publish-docs.sh
 branches:
   only:
   - master
