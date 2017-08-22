@@ -1,23 +1,58 @@
-buildscript {
-    repositories { maven { url "https://plugins.gradle.org/m2/" } }
-}
-
 plugins {
-    id 'com.cfnstacks.gradle.artifacts3' version '0.1.1'
+    id 'com.cfnstacks.gradle.artifacts3' version '0.1.6'
 }
 
 group = 'com.cfnstacks'
 description = 'Multi-VPC Environment'
 
-def _profile = (hasProperty('profile')) ? profile : ''
-def _repo = (hasProperty('repo')) ? repo : 'cfn-stacks.com.s3.us-east-2.amazonaws.com'
-def _stack = (hasProperty('stack')) ? stack : cloudFormation.stackName
+ext.params = [:]
+if(project.file('local-config.groovy').exists()) { apply from: 'local-config.groovy' }
+def setParam(name, defaultValue) { (hasProperty(name)) ? property(name) : (params[name]) ? params[name] :defaultValue }
 
-artifacts3 {
-    group = 'com.cfnstacks'
-    profileName = _profile
-    repo = _repo
-    stackName = _stack
+ext.params.with {
+    group = setParam('group', 'com.cfnstacks')
+    profile = setParam('profile', '')
+    stackParamSet = setParam('stackParamSet', 'template')
+    region = setParam('region', 'us-east-2')
+    repo = setParam('repo', 'cfn-stacks.com.s3.us-east-2.amazonaws.com')
+    template = setParam('template', 'multi-vpc.yaml')
 }
 
-apply from: (hasProperty('deploy')) ? deploy : 'deploy-dev.groovy'
+ext.stackParameters = [
+    template: [:] // template only, not launching any stacks
+]
+
+artifacts3 {
+    group = params.group
+    profileName = params.profile
+    repo = params.repo
+}
+
+aws {
+    profileName = params.profile
+    region = params.region
+}
+
+cloudFormation {
+    templateFile = project.file("build/cloudformation/${params.template}")
+    stackName = params.stack
+    capabilityIam false
+    onFailure params.failure
+    conventionMapping.stackParams = { project.ext.stackParameters[project.ext.params.stackParamSet] }
+}
+
+asciidoctor {
+    backends 'html5', 'pdf'
+    attributes \
+        'build-gradle': file('build.gradle'),
+        'stylesheet': 'stylesheets/style.css',
+        'source-highlighter': 'coderay',
+        'imagesdir': 'images',
+        'toc': 'left',
+        'icons': 'font',
+        'setanchors': '',
+        'idprefix': '',
+        'idseparator': '-',
+        'docinfo1': '',
+        'projectVersion': project.version
+}
