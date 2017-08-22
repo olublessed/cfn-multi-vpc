@@ -10,11 +10,12 @@ if(project.file('local-config.groovy').exists()) { apply from: 'local-config.gro
 def setParam(name, defaultValue) { (hasProperty(name)) ? property(name) : (params[name]) ? params[name] :defaultValue }
 
 ext.params.with {
+    failure = setParam('failure', 'ROLLBACK') // DO_NOTHING | ROLLBACK | DELETE
     group = setParam('group', 'com.cfnstacks')
     profile = setParam('profile', '')
-    stackParamSet = setParam('stackParamSet', 'template')
     region = setParam('region', 'us-east-2')
     repo = setParam('repo', 'cfn-stacks.com.s3.us-east-2.amazonaws.com')
+    stackParamSet = setParam('stackParamSet', 'template')
     template = setParam('template', 'multi-vpc.yaml')
 }
 
@@ -36,7 +37,7 @@ aws {
 cloudFormation {
     templateFile = project.file("build/cloudformation/${params.template}")
     stackName = params.stack
-    capabilityIam false
+    capabilityIam true
     onFailure params.failure
     conventionMapping.stackParams = { project.ext.stackParameters[project.ext.params.stackParamSet] }
 }
