@@ -1,6 +1,8 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Multi VPC Deployment Environment
+
 Parameters:
+
   ProjectName:
     Description: A descriptive label used in Name tags
     Type: String
@@ -64,12 +66,15 @@ Parameters:
     Description: The SSH key pair in your account to use for all other EC2 instance
       logins
     Type: AWS::EC2::KeyPair::KeyName
+
 Conditions:
+
   CreateProductionVPC: !Equals [ true, !Ref bCreateProductionVPC]
   CreateStagingVPC: !Equals [ true, !Ref bCreateStagingVPC]
   CreateTestVPC: !Equals [ true, !Ref bCreateTestVPC]
   CreateDevVPC: !Equals [ true, !Ref bCreateDevVPC]
   LoadConfigRulesTemplate: !Equals [ true, !FindInMap [ RegionServiceSupport, !Ref 'AWS::Region', ConfigRules ] ]
+
 Resources:
   Iam:
     Type: 'AWS::CloudFormation::Stack'
@@ -78,6 +83,7 @@ Resources:
         - ${StackTemplates}/${TemplateVersion}/iam.yaml
         - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
       TimeoutInMinutes: 20
+
   Logging:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
@@ -88,6 +94,7 @@ Resources:
       Parameters:
         pNotifyEmail: !Ref NotificationEmail
         pSupportsGlacier: !FindInMap [ RegionServiceSupport, !Ref 'AWS::Region', Glacier ]
+
   ProductionVpc:
     Type: 'AWS::CloudFormation::Stack'
     Condition: CreateProductionVPC
@@ -108,9 +115,7 @@ Resources:
         pDBPrivateSubnetBCIDR: !Sub "${ProductionVpcCidrBlock}.33.0/24"
         pDMZSubnetACIDR: !Sub "${ProductionVpcCidrBlock}.34.0/24"
         pDMZSubnetBCIDR: !Sub "${ProductionVpcCidrBlock}.35.0/24"
-        pTemplates: !Sub
-          - ${StackTemplates}/${TemplateVersion}
-          - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
+
   StagingVpc:
     Type: 'AWS::CloudFormation::Stack'
     Condition: CreateStagingVPC
@@ -131,9 +136,7 @@ Resources:
         pDBPrivateSubnetBCIDR: !Sub "${StagingVpcCidrBlock}.33.0/24"
         pDMZSubnetACIDR: !Sub "${StagingVpcCidrBlock}.34.0/24"
         pDMZSubnetBCIDR: !Sub "${StagingVpcCidrBlock}.35.0/24"
-        pTemplates: !Sub
-          - ${StackTemplates}/${TemplateVersion}
-          - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
+
   TestVpc:
     Type: 'AWS::CloudFormation::Stack'
     Condition: CreateTestVPC
@@ -154,9 +157,7 @@ Resources:
         pDBPrivateSubnetBCIDR: !Sub "${TestVpcCidrBlock}.33.0/24"
         pDMZSubnetACIDR: !Sub "${TestVpcCidrBlock}.34.0/24"
         pDMZSubnetBCIDR: !Sub "${TestVpcCidrBlock}.35.0/24"
-        pTemplates: !Sub
-          - ${StackTemplates}/${TemplateVersion}
-          - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
+
   DevVpc:
     Type: 'AWS::CloudFormation::Stack'
     Condition: CreateDevVPC
@@ -177,9 +178,7 @@ Resources:
         pDBPrivateSubnetBCIDR: !Sub "${DevelopmentVpcCidrBlock}.33.0/24"
         pDMZSubnetACIDR: !Sub "${DevelopmentVpcCidrBlock}.34.0/24"
         pDMZSubnetBCIDR: !Sub "${DevelopmentVpcCidrBlock}.35.0/24"
-        pTemplates: !Sub
-          - ${StackTemplates}/${TemplateVersion}
-          - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
+
   ManagementVpc:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
@@ -224,11 +223,12 @@ Resources:
         pSupportsNatGateway: !FindInMap [ RegionServiceSupport, !Ref 'AWS::Region', NatGateway ]
         pNatAmi: !FindInMap [ AWSAMIRegionMap, !Ref 'AWS::Region', AMZNLINUXHVM ]
         pNatInstanceType: !FindInMap [ AWSAMIRegionMap, !Ref 'AWS::Region', InstanceType ]
+
 Mappings:
 
   Constants:
     ValueOf:
-      BaseInfraTemplateVersion: 'release/com/cfnstacks/cfn-base-vpc/0.0.3'
+      BaseInfraTemplateVersion: 'release/com/cfnstacks/cfn-base-vpc/0.0.4'
 
   RegionServiceSupport:
     us-east-1:
@@ -291,6 +291,7 @@ Mappings:
       ConfigRules: false
       NatGateway: false
       Glacier: false
+
   AWSInfoRegionMap:
     ap-northeast-1:
       Partition: aws
@@ -337,11 +338,13 @@ Mappings:
     us-west-2:
       Partition: aws
       QuickStartS3URL: https://s3.amazonaws.com
+
   CustomVariables:
     vResourceEnvironmentTagKey:
       Value: Environment
     vResourceEnvironmentTagValue:
       Value: development
+
   AWSAMIRegionMap:
     AMI:
       AMZNLINUXHVM: amzn-ami-hvm-2017.03.1.20170812-x86_64-gp2
@@ -405,7 +408,9 @@ Mappings:
       AMZNLINUXHVM: ami-aa5ebdd2
       InstanceType: m4.large
       InstanceTypeDatabase: db.m4.large
+
 Outputs:
+
   AmznLinuxHvmAMI:
     Description: Amazon Linux AMI
     Value: !FindInMap [ AWSAMIRegionMap, !Ref 'AWS::Region', AMZNLINUXHVM ]
