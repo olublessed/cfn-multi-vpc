@@ -183,7 +183,7 @@ Resources:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
       TemplateURL: !Sub
-        - ${StackTemplates}/${TemplateVersion}/vpc-environment.yaml
+        - ${StackTemplates}/${TemplateVersion}/vpc-management.yaml
         - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
       TimeoutInMinutes: 20
       Parameters:
