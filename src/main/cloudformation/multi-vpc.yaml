@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Deploy application stack example in a basic VPC
+Description: Multi VPC Deployment Environment
 Parameters:
   ProjectName:
     Description: A descriptive label used in Name tags
@@ -38,10 +38,6 @@ Parameters:
     Description: Template service base URL
     Type: String
     Default: https://s3.us-east-2.amazonaws.com/cfn-stacks.com/templates
-  InfraTemplates:
-    Description: Key name prefix for infrastructure templates
-    Type: String
-    Default: release/com/cfnstacks/cfn-base-vpc/0.0.3
   bCreateProductionVPC:
     Description: Should the Production VPC get created?
     Type: String
@@ -78,12 +74,16 @@ Resources:
   Iam:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
-      TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/iam.yaml'
+      TemplateURL: !Sub
+        - ${StackTemplates}/${TemplateVersion}/iam.yaml
+        - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
       TimeoutInMinutes: 20
   Logging:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
-      TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/logging.yaml'
+      TemplateURL: !Sub
+        - ${StackTemplates}/${TemplateVersion}/logging.yaml
+        - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
       TimeoutInMinutes: 20
       Parameters:
         pNotifyEmail: !Ref NotificationEmail
@@ -92,7 +92,9 @@ Resources:
     Type: 'AWS::CloudFormation::Stack'
     Condition: CreateProductionVPC
     Properties:
-      TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/vpc-environment.yaml'
+      TemplateURL: !Sub
+        - ${StackTemplates}/${TemplateVersion}/vpc-environment.yaml
+        - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
       TimeoutInMinutes: 20
       Parameters:
         pVPCName: !Sub "${ProjectName} Production VPC"
@@ -106,12 +108,16 @@ Resources:
         pDBPrivateSubnetBCIDR: !Sub "${ProductionVpcCidrBlock}.33.0/24"
         pDMZSubnetACIDR: !Sub "${ProductionVpcCidrBlock}.34.0/24"
         pDMZSubnetBCIDR: !Sub "${ProductionVpcCidrBlock}.35.0/24"
-        pTemplates: !Sub "${StackTemplates}/${InfraTemplates}"
+        pTemplates: !Sub
+          - ${StackTemplates}/${TemplateVersion}
+          - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
   StagingVpc:
     Type: 'AWS::CloudFormation::Stack'
     Condition: CreateStagingVPC
     Properties:
-      TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/vpc-environment.yaml'
+      TemplateURL: !Sub
+        - ${StackTemplates}/${TemplateVersion}/vpc-environment.yaml
+        - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
       TimeoutInMinutes: 20
       Parameters:
         pVPCName: !Sub "${ProjectName} Staging VPC"
@@ -125,12 +131,16 @@ Resources:
         pDBPrivateSubnetBCIDR: !Sub "${StagingVpcCidrBlock}.33.0/24"
         pDMZSubnetACIDR: !Sub "${StagingVpcCidrBlock}.34.0/24"
         pDMZSubnetBCIDR: !Sub "${StagingVpcCidrBlock}.35.0/24"
-        pTemplates: !Sub "${StackTemplates}/${InfraTemplates}"
+        pTemplates: !Sub
+          - ${StackTemplates}/${TemplateVersion}
+          - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
   TestVpc:
     Type: 'AWS::CloudFormation::Stack'
     Condition: CreateTestVPC
     Properties:
-      TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/vpc-environment.yaml'
+      TemplateURL: !Sub
+        - ${StackTemplates}/${TemplateVersion}/vpc-environment.yaml
+        - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
       TimeoutInMinutes: 20
       Parameters:
         pVPCName: !Sub "${ProjectName} Test VPC"
@@ -144,12 +154,16 @@ Resources:
         pDBPrivateSubnetBCIDR: !Sub "${TestVpcCidrBlock}.33.0/24"
         pDMZSubnetACIDR: !Sub "${TestVpcCidrBlock}.34.0/24"
         pDMZSubnetBCIDR: !Sub "${TestVpcCidrBlock}.35.0/24"
-        pTemplates: !Sub "${StackTemplates}/${InfraTemplates}"
+        pTemplates: !Sub
+          - ${StackTemplates}/${TemplateVersion}
+          - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
   DevVpc:
     Type: 'AWS::CloudFormation::Stack'
     Condition: CreateDevVPC
     Properties:
-      TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/vpc-environment.yaml'
+      TemplateURL: !Sub
+        - ${StackTemplates}/${TemplateVersion}/vpc-environment.yaml
+        - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
       TimeoutInMinutes: 20
       Parameters:
         pVPCName: !Sub "${ProjectName} Dev VPC"
@@ -163,11 +177,15 @@ Resources:
         pDBPrivateSubnetBCIDR: !Sub "${DevelopmentVpcCidrBlock}.33.0/24"
         pDMZSubnetACIDR: !Sub "${DevelopmentVpcCidrBlock}.34.0/24"
         pDMZSubnetBCIDR: !Sub "${DevelopmentVpcCidrBlock}.35.0/24"
-        pTemplates: !Sub "${StackTemplates}/${InfraTemplates}"
+        pTemplates: !Sub
+          - ${StackTemplates}/${TemplateVersion}
+          - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
   ManagementVpc:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
-      TemplateURL: !Sub '${StackTemplates}/${InfraTemplates}/vpc-management.yaml'
+      TemplateURL: !Sub
+        - ${StackTemplates}/${TemplateVersion}/vpc-environment.yaml
+        - TemplateVersion: !FindInMap [ Constants, ValueOf, BaseInfraTemplateVersion ]
       TimeoutInMinutes: 20
       Parameters:
         pProductionCIDR: !If [ CreateProductionVPC, !Sub "${ProductionVpcCidrBlock}.0.0/16", !Ref 'AWS::NoValue' ]
@@ -207,6 +225,11 @@ Resources:
         pNatAmi: !FindInMap [ AWSAMIRegionMap, !Ref 'AWS::Region', AMZNLINUXHVM ]
         pNatInstanceType: !FindInMap [ AWSAMIRegionMap, !Ref 'AWS::Region', InstanceType ]
 Mappings:
+
+  Constants:
+    ValueOf:
+      BaseInfraTemplateVersion: 'release/com/cfnstacks/cfn-base-vpc/0.0.3'
+
   RegionServiceSupport:
     us-east-1:
       ConfigRules: true
