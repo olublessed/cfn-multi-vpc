@@ -228,7 +228,7 @@ Mappings:
 
   Constants:
     ValueOf:
-      BaseInfraTemplateVersion: 'release/com/cfnstacks/cfn-base-vpc/0.0.4'
+      BaseInfraTemplateVersion: 'release/com/cfnstacks/cfn-base-vpc/0.0.6'
 
   RegionServiceSupport:
     us-east-1:
