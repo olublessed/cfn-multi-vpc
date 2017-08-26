@@ -456,16 +456,16 @@ Outputs:
     Value: !GetAtt ProductionVpc.Outputs.rAppPrivateSubnetBCIDR
   ProductionDBPrivateSubnetA:
     Condition: CreateProductionVPC
-    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetA
+    Value: !GetAtt ProductionVpc.Outputs.rDBPrivateSubnetA
   ProductionDBPrivateSubnetACIDR:
     Condition: CreateProductionVPC
-    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetACIDR
+    Value: !GetAtt ProductionVpc.Outputs.rDBPrivateSubnetACIDR
   ProductionDBPrivateSubnetB:
     Condition: CreateProductionVPC
-    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetB
+    Value: !GetAtt ProductionVpc.Outputs.rDBPrivateSubnetB
   ProductionDBPrivateSubnetBCIDR:
     Condition: CreateProductionVPC
-    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetBCIDR
+    Value: !GetAtt ProductionVpc.Outputs.rDBPrivateSubnetBCIDR
 
   StagingVpc:
     Condition: CreateStagingVPC
@@ -499,16 +499,16 @@ Outputs:
     Value: !GetAtt StagingVpc.Outputs.rAppPrivateSubnetBCIDR
   StagingDBPrivateSubnetA:
     Condition: CreateStagingVPC
-    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetA
+    Value: !GetAtt StagingVpc.Outputs.rDBPrivateSubnetA
   StagingDBPrivateSubnetACIDR:
     Condition: CreateStagingVPC
-    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetACIDR
+    Value: !GetAtt StagingVpc.Outputs.rDBPrivateSubnetACIDR
   StagingDBPrivateSubnetB:
     Condition: CreateStagingVPC
-    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetB
+    Value: !GetAtt StagingVpc.Outputs.rDBPrivateSubnetB
   StagingDBPrivateSubnetBCIDR:
     Condition: CreateStagingVPC
-    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetBCIDR
+    Value: !GetAtt StagingVpc.Outputs.rDBPrivateSubnetBCIDR
 
   TestVpc:
     Condition: CreateTestVPC
@@ -542,16 +542,16 @@ Outputs:
     Value: !GetAtt TestVpc.Outputs.rAppPrivateSubnetBCIDR
   TestDBPrivateSubnetA:
     Condition: CreateTestVPC
-    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetA
+    Value: !GetAtt TestVpc.Outputs.rDBPrivateSubnetA
   TestDBPrivateSubnetACIDR:
     Condition: CreateTestVPC
-    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetACIDR
+    Value: !GetAtt TestVpc.Outputs.rDBPrivateSubnetACIDR
   TestDBPrivateSubnetB:
     Condition: CreateTestVPC
-    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetB
+    Value: !GetAtt TestVpc.Outputs.rDBPrivateSubnetB
   TestDBPrivateSubnetBCIDR:
     Condition: CreateTestVPC
-    Value: !GetAtt DevVpc.Outputs.rDBPrivateSubnetBCIDR
+    Value: !GetAtt TestVpc.Outputs.rDBPrivateSubnetBCIDR
 
   DevVpc:
     Condition: CreateDevVPC
