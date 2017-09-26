@@ -56,6 +56,14 @@ Parameters:
     Description: Should the Dev VPC get created?
     Type: String
     Default: true
+  bCreateIAM:
+    Description: Create IAM accounts
+    Type: String
+    Default: false
+  bCreateLogging:
+    Description: Create Logging
+    Type: String
+    Default: false
   allowedCIDR:
     Description: IPs allowed to access the bastion
     Type: String
@@ -73,11 +81,15 @@ Conditions:
   CreateStagingVPC: !Equals [ true, !Ref bCreateStagingVPC]
   CreateTestVPC: !Equals [ true, !Ref bCreateTestVPC]
   CreateDevVPC: !Equals [ true, !Ref bCreateDevVPC]
+  CreateIAM: !Equals [ true, !Ref bCreateIAM ]
+  CreateLogging: !Equals [ true, !Ref bCreateLogging ]
   LoadConfigRulesTemplate: !Equals [ true, !FindInMap [ RegionServiceSupport, !Ref 'AWS::Region', ConfigRules ] ]
 
 Resources:
+
   Iam:
     Type: 'AWS::CloudFormation::Stack'
+    Condition: CreateIAM
     Properties:
       TemplateURL: !Sub
         - ${StackTemplates}/${TemplateVersion}/iam.yaml
@@ -86,6 +98,7 @@ Resources:
 
   Logging:
     Type: 'AWS::CloudFormation::Stack'
+    Condition: CreateLogging
     Properties:
       TemplateURL: !Sub
         - ${StackTemplates}/${TemplateVersion}/logging.yaml
