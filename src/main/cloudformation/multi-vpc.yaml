@@ -116,7 +116,7 @@ Parameters:
   AllowedCIDR:
     Description: IPs allowed to access the bastion server
     Type: String
-    Default: 199.223.21.100/32
+    Default: 0.0.0.0/0
 
   EC2KeyPairBastion:
     Description: The SSH key pair in your account to use for the bastion host login
