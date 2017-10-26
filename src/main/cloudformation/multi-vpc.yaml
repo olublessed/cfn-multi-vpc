@@ -87,31 +87,49 @@ Parameters:
     Description: Should the Production VPC get created?
     Type: String
     Default: false
+    AllowedValues:
+      - true
+      - false
 
   CreateStagingVPC:
     Description: Should the Staging VPC get created?
     Type: String
     Default: false
+    AllowedValues:
+      - true
+      - false
 
   CreateTestVPC:
     Description: Should the Test VPC get created?
     Type: String
     Default: false
+    AllowedValues:
+      - true
+      - false
 
   CreateDevVPC:
     Description: Should the Dev VPC get created?
     Type: String
     Default: true
+    AllowedValues:
+      - true
+      - false
 
   CreateIAM:
     Description: Create IAM accounts
     Type: String
     Default: false
+    AllowedValues:
+      - true
+      - false
 
   CreateLogging:
     Description: Create Logging
     Type: String
     Default: false
+    AllowedValues:
+      - true
+      - false
 
   AllowedCIDR:
     Description: IPs allowed to access the bastion server
